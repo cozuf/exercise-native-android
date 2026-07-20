@@ -70,6 +70,24 @@ class MainActivity : ComponentActivity() {
         Log.d(TAG, "LIFECYCLE: onResume tetiklendi! Uygulama şu an tamamen aktif ve odaklanmış durumda.")
         Log.d(TAG, "STRATEJİ: İleride Socket bağlantısını canlı tutma/yenileme işini tam burada tetikleyeceğiz!")
     }
+    // 4. UYGULAMA ODAĞINI KAYBEDERKEN (Örn: Üstten bildirim paneli indiğinde veya başka bir ekran açılırken)
+    override fun onPause() {
+        super.onPause()
+        Log.d(TAG, "LIFECYCLE: onPause tetiklendi! Ekran odağını kaybediyor.")
+    }
+
+    // 5. UYGULAMA ARKA PLANA ATILDIĞINDA (Home tuşuna basıldığında veya başka uygulamaya geçildiğinde)
+    override fun onStop() {
+        super.onStop()
+        Log.d(TAG, "LIFECYCLE: onStop tetiklendi! Ekran artık tamamen görünmez durumda.")
+        Log.d(TAG, "STRATEJİ: Pil ve internet tasarrufu için SOCKET bağlantısını tam burada KESECEĞİZ!")
+    }
+
+    // 6. UYGULAMA TAMAMEN KAPATILDIĞINDA VEYA EKRAN DÖNDÜRÜLDÜĞÜNDE
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d(TAG, "LIFECYCLE: onDestroy tetiklendi! Aktivite bellekten tamamen siliniyor.")
+    }
 }
 
 @Composable
