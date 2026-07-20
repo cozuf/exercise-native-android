@@ -39,6 +39,7 @@ class MainActivity : ComponentActivity() {
 //        }
 //    }
 
+    // 1. EKRAN İLK KEZ OLUŞTURULURKEN (Dün yazdığımız yer)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -57,11 +58,13 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    // 2. EKRAN KULLANICIYA GÖRÜNÜR HALE GELİRKEN
     override fun onStart() {
         super.onStart()
         Log.d(TAG, "LIFECYCLE: onStart tetiklendi! Ekran şu an görünür ama henüz etkileşime açık değil.")
     }
 
+    // 3. EKRAN TAMAMEN ÖN PLANDA VE ETKİLEŞİME AÇIKKEN
     override fun onResume() {
         super.onResume()
         Log.d(TAG, "LIFECYCLE: onResume tetiklendi! Uygulama şu an tamamen aktif ve odaklanmış durumda.")
