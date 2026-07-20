@@ -19,12 +19,30 @@ class MainActivity : ComponentActivity() {
     // Logları filtrelemek için kullanacağımız benzersiz bir etiket (TAG)
     private val TAG = "AndroidKampLog"
 
+//    override fun onCreate(savedInstanceState: Bundle?) {
+//        super.onCreate(savedInstanceState)
+//
+//        // 1. İLK LOGUMUZ: Uygulamanın başarıyla başladığını işletim sistemine ve kendimize raporluyoruz
+//        Log.d(TAG, "Uygulama başarıyla başlatıldı ve onCreate tetiklendi!")
+//        Log.d(TAG, "Manifest içindeki INTERNET izni şu an aktif durumda.")
+//
+//        enableEdgeToEdge()
+//        setContent {
+//            ModernAndroidCampTheme {
+//                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+//                    Greeting(
+//                        name = "Android",
+//                        modifier = Modifier.padding(innerPadding)
+//                    )
+//                }
+//            }
+//        }
+//    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // 1. İLK LOGUMUZ: Uygulamanın başarıyla başladığını işletim sistemine ve kendimize raporluyoruz
-        Log.d(TAG, "Uygulama başarıyla başlatıldı ve onCreate tetiklendi!")
-        Log.d(TAG, "Manifest içindeki INTERNET izni şu an aktif durumda.")
+        Log.d(TAG, "LIFECYCLE: onCreate tetiklendi! Ekran belleğe yüklendi.")
 
         enableEdgeToEdge()
         setContent {
@@ -37,6 +55,17 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Log.d(TAG, "LIFECYCLE: onStart tetiklendi! Ekran şu an görünür ama henüz etkileşime açık değil.")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d(TAG, "LIFECYCLE: onResume tetiklendi! Uygulama şu an tamamen aktif ve odaklanmış durumda.")
+        Log.d(TAG, "STRATEJİ: İleride Socket bağlantısını canlı tutma/yenileme işini tam burada tetikleyeceğiz!")
     }
 }
 
