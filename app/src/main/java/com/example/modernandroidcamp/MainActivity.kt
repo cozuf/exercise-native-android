@@ -16,30 +16,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.modernandroidcamp.ui.theme.ModernAndroidCampTheme
 
+data class Kullanici(
+    val id: Int,
+    val isim: String,
+    val eposta: String,
+    val aktifMi: Boolean = true // Varsayılan değer atanabilir
+)
+
+data class Ogrenci(
+    val id: Int,
+    val ad: String,
+    val notOrtalamasi: Double? // Null gelebilir
+)
+
 class MainActivity : ComponentActivity() {
 
     // Logları filtrelemek için kullanacağımız benzersiz bir etiket (TAG)
     private val TAG = "AndroidKampLog"
-
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//
-//        // 1. İLK LOGUMUZ: Uygulamanın başarıyla başladığını işletim sistemine ve kendimize raporluyoruz
-//        Log.d(TAG, "Uygulama başarıyla başlatıldı ve onCreate tetiklendi!")
-//        Log.d(TAG, "Manifest içindeki INTERNET izni şu an aktif durumda.")
-//
-//        enableEdgeToEdge()
-//        setContent {
-//            ModernAndroidCampTheme {
-//                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-//                    Greeting(
-//                        name = "Android",
-//                        modifier = Modifier.padding(innerPadding)
-//                    )
-//                }
-//            }
-//        }
-//    }
 
     // 1. EKRAN İLK KEZ OLUŞTURULURKEN (Dün yazdığımız yer)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,13 +40,50 @@ class MainActivity : ComponentActivity() {
 
         Log.d(TAG, "LIFECYCLE: onCreate tetiklendi! Ekran belleğe yüklendi.")
 
+        val isim: String = "Yusuf"
+        // isim = "Ahmet" // DERLEME HATASI! val tekrar atanamaz.
+
+        var sayac: Int = 0
+        sayac = 1 // Geçerli
+
+        var mesaj: String = "Merhaba"
+        // mesaj = null // DERLEME HATASI! Kotlin izin vermez.
+
+        // Null olabilecek bir değişken için tipin sonuna '?' koyarız:
+        var nullableMesaj: String? = "Merhaba"
+        nullableMesaj = null // Geçerli
+
+        // 1. Safe Call Operator (?.): Değişken null ise alt özelliği çağırmaz, direkt null döner (Çökmez).
+        Log.d("LOG", nullableMesaj?.length.toString())
+
+        // 2. Elvis Operator (?:) - (TypeScript'teki Nullish Coalescing ?? gibi):
+        // "Eğer soldaki değer null ise, sağdaki varsayılan değeri kullan" demektir.
+        val uzunluk: Int = nullableMesaj?.length ?: 0
+
+        // 3. Not-Null Assertion (!!):
+        // "Bu değer %100 null değil, derleyici sen aradan çekil" demektir.
+        // Eğer değişken null çıkarsa uygulama ANINDA ÇÖKER (Crash). Kullanmaktan kaçınmalıyız!
+        // val kesinUzunluk: Int = nullableMesaj!!.length
+
+        // notOrtalamasi null olan bir öğrenci oluşturuyoruz
+        val ogrenci1 = Ogrenci(id = 1, ad = "Yusuf Coşkun", notOrtalamasi = null)
+
+        // Elvis (?:) operatörü ile null kontrolü yapıyoruz: Not null ise kendisini, null ise 0.0 al.
+        val gosterilecekNot = ogrenci1.notOrtalamasi ?: 0.0
+
+        Log.d(TAG, "Öğrenci Adı: ${ogrenci1.ad}, Notu: $gosterilecekNot")
+
+        // copy() fonksiyonu örneği (Sadece belirli alanları değiştirip yeni obje türetme)
+        val ogrenci2 = ogrenci1.copy(id = 2, notOrtalamasi = 85.5)
+        Log.d(TAG, "Yeni Öğrenci: ${ogrenci2.ad}, Güncellenmiş Notu: ${ogrenci2.notOrtalamasi}")
+
         // Sadece uygulama ilk kez sıfırdan açıldığında 1 defa çalışır
-        if (savedInstanceState == null) {
-            // Denemek için birini çağırabilirsin:
-            webSitesiAc("https://github.com")
-            // ya da:
-            // metinPaylas("Android kampında 4. günü tamamlıyorum!")
-        }
+//        if (savedInstanceState == null) {
+//            // Denemek için birini çağırabilirsin:
+//            webSitesiAc("https://github.com")
+//            // ya da:
+//            // metinPaylas("Android kampında 4. günü tamamlıyorum!")
+//        }
         enableEdgeToEdge()
         setContent {
             ModernAndroidCampTheme {
