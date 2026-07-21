@@ -1,6 +1,7 @@
 package com.example.modernandroidcamp
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -46,6 +47,13 @@ class MainActivity : ComponentActivity() {
 
         Log.d(TAG, "LIFECYCLE: onCreate tetiklendi! Ekran belleğe yüklendi.")
 
+        // Sadece uygulama ilk kez sıfırdan açıldığında 1 defa çalışır
+        if (savedInstanceState == null) {
+            // Denemek için birini çağırabilirsin:
+            webSitesiAc("https://github.com")
+            // ya da:
+            // metinPaylas("Android kampında 4. günü tamamlıyorum!")
+        }
         enableEdgeToEdge()
         setContent {
             ModernAndroidCampTheme {
@@ -71,17 +79,18 @@ class MainActivity : ComponentActivity() {
         Log.d(TAG, "LIFECYCLE: onResume tetiklendi! Uygulama şu an tamamen aktif ve odaklanmış durumda.")
         Log.d(TAG, "STRATEJİ: İleride Socket bağlantısını canlı tutma/yenileme işini tam burada tetikleyeceğiz!")
 
-        // --- INTENT BAŞLIYOR ---
-        // Postacıyı hazırlıyoruz: MainActivity'den SecondActivity'ye gideceğini söylüyoruz.
-        val intent = Intent(this, SecondActivity::class.java)
 
-        // Giderken yanına bir veri paketi veriyoruz (Key-Value mantığı)
-        intent.putExtra(SecondActivity.EXTRA_KULLANICI_ADI, "Yusuf Coşkun")
-        intent.putExtra(SecondActivity.EXTRA_KAMP_GUNU, 4)
-
-        // Postacıyı yola çıkarıyoruz, Android sistemi yeni ekranı başlatıyor
-        startActivity(intent)
-        // -----------------------
+//        // --- INTENT BAŞLIYOR ---
+//        // Postacıyı hazırlıyoruz: MainActivity'den SecondActivity'ye gideceğini söylüyoruz.
+//        val intent = Intent(this, SecondActivity::class.java)
+//
+//        // Giderken yanına bir veri paketi veriyoruz (Key-Value mantığı)
+//        intent.putExtra(SecondActivity.EXTRA_KULLANICI_ADI, "Yusuf Coşkun")
+//        intent.putExtra(SecondActivity.EXTRA_KAMP_GUNU, 4)
+//
+//        // Postacıyı yola çıkarıyoruz, Android sistemi yeni ekranı başlatıyor
+//        startActivity(intent)
+//        // -----------------------
     }
 
     // 4. UYGULAMA ODAĞINI KAYBEDERKEN (Örn: Üstten bildirim paneli indiğinde veya başka bir ekran açılırken)
@@ -101,6 +110,25 @@ class MainActivity : ComponentActivity() {
     override fun onDestroy() {
         super.onDestroy()
         Log.d(TAG, "LIFECYCLE: onDestroy tetiklendi! Aktivite bellekten tamamen siliniyor.")
+    }
+
+    // 1. WEB SİTESİ AÇMA (ACTION_VIEW)
+    fun webSitesiAc(url: String) {
+        // Android'e "Bir URI/Link görüntülemek istiyorum" diyoruz
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        startActivity(intent)
+    }
+
+    // 2. DIŞARIYA METİN PAYLAŞMA (ACTION_SEND)
+    fun metinPaylas(mesaj: String) {
+        val sendIntent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, mesaj)
+            type = "text/plain"
+        }
+        // Kullanıcının karşısına sistemin "Şununla Paylaş" menüsünü (Chooser) çıkarır
+        val shareIntent = Intent.createChooser(sendIntent, "Mesajı Şununla Paylaş:")
+        startActivity(shareIntent)
     }
 }
 
