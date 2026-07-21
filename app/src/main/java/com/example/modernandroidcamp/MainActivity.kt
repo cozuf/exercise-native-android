@@ -1,5 +1,6 @@
 package com.example.modernandroidcamp
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -69,7 +70,20 @@ class MainActivity : ComponentActivity() {
         super.onResume()
         Log.d(TAG, "LIFECYCLE: onResume tetiklendi! Uygulama şu an tamamen aktif ve odaklanmış durumda.")
         Log.d(TAG, "STRATEJİ: İleride Socket bağlantısını canlı tutma/yenileme işini tam burada tetikleyeceğiz!")
+
+        // --- INTENT BAŞLIYOR ---
+        // Postacıyı hazırlıyoruz: MainActivity'den SecondActivity'ye gideceğini söylüyoruz.
+        val intent = Intent(this, SecondActivity::class.java)
+
+        // Giderken yanına bir veri paketi veriyoruz (Key-Value mantığı)
+        intent.putExtra(SecondActivity.EXTRA_KULLANICI_ADI, "Yusuf Coşkun")
+        intent.putExtra(SecondActivity.EXTRA_KAMP_GUNU, 4)
+
+        // Postacıyı yola çıkarıyoruz, Android sistemi yeni ekranı başlatıyor
+        startActivity(intent)
+        // -----------------------
     }
+
     // 4. UYGULAMA ODAĞINI KAYBEDERKEN (Örn: Üstten bildirim paneli indiğinde veya başka bir ekran açılırken)
     override fun onPause() {
         super.onPause()
