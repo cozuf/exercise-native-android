@@ -1,76 +1,97 @@
 package com.example.modernandroidcamp
 
-import android.content.Intent
-import android.net.Uri
+import android.content.res.Configuration
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.example.modernandroidcamp.ui.theme.ModernAndroidCampTheme
 
 class MainActivity : ComponentActivity() {
 
-    // Logları filtrelemek için kullanacağımız benzersiz bir etiket (TAG)
-    private val TAG = "AndroidKampLog"
-
-
-
-    // 1. EKRAN İLK KEZ OLUŞTURULURKEN (Dün yazdığımız yer)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        Log.d(TAG, "LIFECYCLE: onCreate tetiklendi! Ekran belleğe yüklendi.")
-
-        if (savedInstanceState == null) {
-            // 1. Profil nesnemizi oluşturuyoruz (githubUrl bilinçli olarak null verilebilir ya da doldurulabilir)
-            val profilim = KullaniciProfili(
-                id = 1,
-                isim = "Yusuf Coşkun",
-                unvan = "Mobile Software Developer",
-                githubUrl = "https://github.com/yusufcoskun",
-                tecrubeYili = 6
-            )
-
-            // 2. SecondActivity'nin 'newIntent' helper'ı sayesinde Intent detaylarıyla uğraşmadan ekranı başlatıyoruz!
-            val intent = SecondActivity.newIntent(this, profilim)
-            startActivity(intent)
-        }
-
-        enableEdgeToEdge()
         setContent {
             ModernAndroidCampTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                // Surface: Arka plan rengini ve temel temayı sağlayan kapsayıcı
+                Surface(color = MaterialTheme.colorScheme.background) {
+                    UserCardList()
                 }
             }
         }
     }
+}
 
+// --- İLK COMPOSABLE BİLEŞENİMİZ ---
+@Composable
+fun UserCard(name: String, title: String) {
+    // Row: React Native'deki flexDirection: 'row'
+    Row(modifier = Modifier.padding(16.dp)) {
+        // Column: React Native'deki flexDirection: 'column'
+        Column {
+            Text(
+                text = name,
+                style = MaterialTheme.typography.titleMedium
+            )
+            Text(
+                text = title,
+                style = MaterialTheme.typography.bodyMedium
+            )
+        }
+    }
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
+fun UserCardList() {
+    Column {
+        UserCard(name = "Yusuf Coşkun", title = "Mobile Application Developer")
+        UserCard(name = "Ahmet Yılmaz", title = "Android Engineer")
+    }
 }
 
-@Preview(showBackground = true)
+// --- CANLI ÖNİZLEME (PREVIEW) ---
+// Emülatörü çalıştırmadan sağ taraftaki "Split" veya "Design" sekmesinden arayüzü görmemizi sağlar.
+//@Preview(showBackground = true)
+
+//@Preview(
+//    showBackground = true,
+//    showSystemUi = true, // Tam telefon ekranını ve durum çubuğunu simüle eder
+//    name = "Tam Ekran Profil Liste Önizlemesi",
+//    uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES
+//)
+//@Preview(name = "Dark Mode", showBackground = true, uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
+// 1. Açık Mod Önizlemesi
+@Preview(
+    name = "Açık Mod",
+    showBackground = true,
+    showSystemUi = true
+)
+// 2. Karanlık Mod Önizlemesi
+@Preview(
+    name = "Karanlık Mod",
+    showSystemUi = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES
+)
 @Composable
-fun GreetingPreview() {
+fun PreviewUserCardList() {
     ModernAndroidCampTheme {
-        Greeting("Android")
+        // Dark Mode geçişlerinde arka planın ve yazı renklerinin
+        // temaya uyum sağlaması için Surface ile sarmalıyoruz:
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = MaterialTheme.colorScheme.background) {
+            UserCardList()
+        }
     }
 }
